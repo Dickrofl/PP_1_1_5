@@ -61,19 +61,7 @@
             <artifactId>hibernate-c3p0</artifactId>
             <version>5.5.8.Final</version>
         </dependency>
-        <!-- Другие зависимости -->
 
-        <!-- Зависимости для логирования SLF4J с Logback -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.32</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.6</version>
-        </dependency>
     </dependencies>
 
 </project>

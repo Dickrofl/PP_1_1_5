@@ -1,19 +1,20 @@
 package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
-import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import jm.task.core.jdbc.util.Util;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
+
 import java.util.List;
 
 
 public class UserDaoHibernateImpl implements UserDao {
     public UserDaoHibernateImpl() {
     }
+
     private final SessionFactory sessionFactory = Util.getSessionFactory();
+
     @Override
     public void createUsersTable() {
         Session session = null;
@@ -28,7 +29,7 @@ public class UserDaoHibernateImpl implements UserDao {
                     "age TINYINT" +
                     ")";
 
-            session.createNativeQuery(createTableQuery).executeUpdate();
+            session.createSQLQuery(createTableQuery).executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,8 +48,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
             String dropTableQuery = "DROP TABLE IF EXISTS User";
 
-            Query<?> query = session.createSQLQuery(dropTableQuery);
-            query.executeUpdate();
+            session.createSQLQuery(dropTableQuery).executeUpdate();
 
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class UserDaoHibernateImpl implements UserDao {
             session = sessionFactory.openSession();
             session.beginTransaction();
 
-            session.save(new User(name,lastName,age));
+            session.save(new User(name, lastName, age));
             System.out.println("User с именем – " + name + " добавлен в базу данных");
             session.getTransaction().commit();
         } catch (Exception e) {
