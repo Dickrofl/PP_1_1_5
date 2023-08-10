@@ -1,4 +1,5 @@
 package jm.task.core.jdbc.util;
+
 import jm.task.core.jdbc.model.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -18,18 +19,19 @@ public class Util {
                 Configuration configuration = new Configuration();
 
                 Properties properties = new Properties();
-                try (InputStream inputStream = Util.class.getClassLoader().getResourceAsStream("hibernate.properties")) {
+                try (InputStream inputStream = Util.class.getClassLoader()
+                        .getResourceAsStream("hibernate.properties")) {
                     properties.load(inputStream);
                 }
 
                 configuration.setProperties(properties);
-
                 configuration.addAnnotatedClass(User.class);
 
                 StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();
 
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
