@@ -3,6 +3,7 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import org.hibernate.SessionFactory;
 import jm.task.core.jdbc.util.Util;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 
@@ -10,10 +11,11 @@ import java.util.List;
 
 
 public class UserDaoHibernateImpl implements UserDao {
+    Transaction transaction;
     public UserDaoHibernateImpl() {
     }
 
-    private final SessionFactory sessionFactory = Util.getSessionFactory();
+    private final SessionFactory sessionFactory = Util.getUtil().getSessionFactory();
 
     @Override
     public void createUsersTable() {
@@ -21,6 +23,7 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
+            Transaction transaction = session.getTransaction();
 
             String createTableQuery = "CREATE TABLE IF NOT EXISTS User (" +
                                       "id INT PRIMARY KEY AUTO_INCREMENT, " +
@@ -30,11 +33,11 @@ public class UserDaoHibernateImpl implements UserDao {
                                       ")";
 
             session.createSQLQuery(createTableQuery).executeUpdate();
-            session.getTransaction().commit();
+            transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
             if (session != null) {
-                session.getTransaction().rollback();
+                transaction.rollback();
             }
         }
     }
@@ -45,16 +48,17 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
+            Transaction transaction = session.getTransaction();
 
             String dropTableQuery = "DROP TABLE IF EXISTS User";
 
             session.createSQLQuery(dropTableQuery).executeUpdate();
 
-            session.getTransaction().commit();
+            transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
             if (session != null) {
-                session.getTransaction().rollback();
+                transaction.rollback();
             }
         }
     }
@@ -65,14 +69,15 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
+            Transaction transaction = session.getTransaction();
 
             session.save(new User(name, lastName, age));
             System.out.println("User с именем – " + name + " добавлен в базу данных");
-            session.getTransaction().commit();
+            transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
             if (session != null) {
-                session.getTransaction().rollback();
+                transaction.rollback();
             }
         }
     }
@@ -83,17 +88,18 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
+            Transaction transaction = session.getTransaction();
 
             User user = session.get(User.class, id);
             if (user != null) {
                 session.delete(user);
             }
 
-            session.getTransaction().commit();
+            transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
             if (session != null) {
-                session.getTransaction().rollback();
+                transaction.rollback();
             }
         }
     }
@@ -105,16 +111,17 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
+            Transaction transaction = session.getTransaction();
 
             String getAllUsersQuery = "FROM User";
             Query<User> query = session.createQuery(getAllUsersQuery, User.class);
             userList = query.getResultList();
 
-            session.getTransaction().commit();
+            transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
             if (session != null) {
-                session.getTransaction().rollback();
+                transaction.rollback();
             }
         }
         return userList;
@@ -126,16 +133,17 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
+            Transaction transaction = session.getTransaction();
 
             String deleteAllUsersQuery = "DELETE FROM User";
             Query<?> query = session.createQuery(deleteAllUsersQuery);
             query.executeUpdate();
 
-            session.getTransaction().commit();
+            transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
             if (session != null) {
-                session.getTransaction().rollback();
+                transaction.rollback();
             }
         }
     }

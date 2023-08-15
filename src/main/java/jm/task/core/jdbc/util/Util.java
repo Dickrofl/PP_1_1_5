@@ -12,36 +12,25 @@ import java.util.Properties;
 
 public class Util {
     private static SessionFactory sessionFactory;
+    private static Util util;
+
+    private Util() {
+    }
+
+    public static Util getUtil() {
+        if (util == null) {
+            util = new Util();
+        }
+        return util;
+    }
+
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
-            try {
-                Configuration configuration = new Configuration();
-
-                Properties properties = new Properties();
-                try (InputStream inputStream = Util.class.getClassLoader()
-                        .getResourceAsStream("hibernate.properties")) {
-                    properties.load(inputStream);
-                }
-
-                configuration.setProperties(properties);
-                configuration.addAnnotatedClass(User.class);
-
-                StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                        .applySettings(configuration.getProperties()).build();
-
-                sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            sessionFactory = new Configuration()
+                    .addAnnotatedClass(User.class)
+                    .buildSessionFactory();
         }
         return sessionFactory;
-    }
-
-    public static void closeSessionFactory() {
-        if (sessionFactory != null) {
-            sessionFactory.close();
-        }
     }
 }

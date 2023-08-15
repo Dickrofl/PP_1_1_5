@@ -12,10 +12,10 @@ public class Main {
         UserService userService = new UserServiceImpl();
         userService.createUsersTable();
 
-        printAndSaveUser(new User("Анна", "Каренина", (byte) 18));
-        printAndSaveUser(new User("Михаил", "Кочевний", (byte) 34));
-        printAndSaveUser(new User("София", "Овечкина", (byte) 29));
-        printAndSaveUser(new User("Виктор", "Шевченко", (byte) 14));
+        saveAndPrintUser(new User("Анна", "Каренина", (byte) 18));
+        saveAndPrintUser(new User("Михаил", "Кочевний", (byte) 34));
+        saveAndPrintUser(new User("София", "Овечкина", (byte) 29));
+        saveAndPrintUser(new User("Виктор", "Шевченко", (byte) 14));
 
         List<User> users = userService.getAllUsers();
 
@@ -27,7 +27,7 @@ public class Main {
         userService.dropUsersTable();
     }
 
-    public static void printAndSaveUser(User user) {
+    public static void saveAndPrintUser(User user) {
         UserService userService = new UserServiceImpl();
         userService.saveUser(user.getName(), user.getLastName(), user.getAge());
         System.out.println("User с именем – " + user.getName() + " добавлен в базу данных");
