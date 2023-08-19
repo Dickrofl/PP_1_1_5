@@ -11,19 +11,18 @@ import java.util.List;
 
 
 public class UserDaoHibernateImpl implements UserDao {
-    Transaction transaction;
+    private SessionFactory sessionFactory = Util.getUtil().getSessionFactory();
+    private Session session;
+    private Transaction transaction;
     public UserDaoHibernateImpl() {
     }
 
-    private final SessionFactory sessionFactory = Util.getUtil().getSessionFactory();
-
     @Override
     public void createUsersTable() {
-        Session session = null;
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
-            Transaction transaction = session.getTransaction();
+            transaction = session.getTransaction();
 
             String createTableQuery = "CREATE TABLE IF NOT EXISTS User (" +
                                       "id INT PRIMARY KEY AUTO_INCREMENT, " +
@@ -44,11 +43,10 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
-        Session session = null;
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
-            Transaction transaction = session.getTransaction();
+            transaction = session.getTransaction();
 
             String dropTableQuery = "DROP TABLE IF EXISTS User";
 
@@ -65,11 +63,10 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Session session = null;
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
-            Transaction transaction = session.getTransaction();
+            transaction = session.getTransaction();
 
             session.save(new User(name, lastName, age));
             System.out.println("User с именем – " + name + " добавлен в базу данных");
@@ -84,11 +81,10 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void removeUserById(long id) {
-        Session session = null;
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
-            Transaction transaction = session.getTransaction();
+            transaction = session.getTransaction();
 
             User user = session.get(User.class, id);
             if (user != null) {
@@ -107,11 +103,10 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         List<User> userList = null;
-        Session session = null;
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
-            Transaction transaction = session.getTransaction();
+            transaction = session.getTransaction();
 
             String getAllUsersQuery = "FROM User";
             Query<User> query = session.createQuery(getAllUsersQuery, User.class);
@@ -129,11 +124,10 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void cleanUsersTable() {
-        Session session = null;
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
-            Transaction transaction = session.getTransaction();
+            transaction = session.getTransaction();
 
             String deleteAllUsersQuery = "DELETE FROM User";
             Query<?> query = session.createQuery(deleteAllUsersQuery);
